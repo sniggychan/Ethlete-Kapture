@@ -1,0 +1,62 @@
+{
+    "id": 1,
+    "username": "guest",
+    "level": 2,
+    "exp": 6,
+    "streak": 0,
+    "rating": "E",
+    "stats": {
+        "strength": 10,
+        "agility": 10,
+        "endurance": 7
+    },
+    "daily_tasks": [
+        "Record a vertical jump",
+        "Complete 20 sit-ups",
+        "Track endurance"
+    ],
+    "progress_history": [
+        {
+            "date": "2025-09-30",
+            "max_height": 53.0,
+            "reps": 28,
+            "time": 25.8,
+            "analysis": "Error: OpenAI failed."
+        },
+        {
+            "date": "2025-01-15",
+            "max_height": 42,
+            "reps": 28,
+            "time": 32,
+            "analysis": "Good form"
+        },
+        {
+            "date": "2025-01-16",
+            "max_height": 45,
+            "reps": 30,
+            "time": 30,
+            "analysis": "Improved"
+        },
+        {
+            "date": "2025-01-17",
+            "max_height": 43,
+            "reps": 29,
+            "time": 31,
+            "analysis": "Consistent"
+        },
+        {
+            "date": "2025-01-18",
+            "max_height": 47,
+            "reps": 32,
+            "time": 29,
+            "analysis": "Excellent"
+        },
+        {
+            "date": "2025-01-19",
+            "max_height": 46,
+            "reps": 31,
+            "time": 30,
+            "analysis": "Strong"
+        }
+    ]
+}

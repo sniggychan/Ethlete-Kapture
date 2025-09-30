@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ethlete Kapture - AI-Powered Sports Talent Assessment</title>
+  <link href="logo.jpeg" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #1a0033, #000); color: #fff; line-height: 1.6; overflow-x: hidden; }
+    header { background: rgba(0,0,0,0.8); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px); }
+  .logo { height: 55px; border-radius: 10px; }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav a { color: #fff; text-decoration: none; font-weight: 600; transition: color 0.3s, transform 0.3s; }
+    nav a:hover { color: #00ffff; transform: scale(1.07); }
+    .hero { padding: 4rem 2rem; text-align: center; background: url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop') no-repeat center/cover; min-height: 520px; position: relative; }
+    .hero-content { position: relative; z-index: 2; }
+    .hero h1 { font-size: 2.2rem; background: linear-gradient(45deg, #ff00ff, #00ffff); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+    .hero p { font-size: 1.05rem; opacity: 0.95; margin-bottom: 2rem; }
+    .btn { background: linear-gradient(45deg, #ff00ff, #00ffff); color: #000; padding: 0.9rem 2.2rem; border: none; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; text-decoration: none; display: inline-block; }
+    .btn:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,255,255,0.5); }
+    .ai-platform { display: flex; justify-content: center; align-items: center; gap: 2rem; padding: 1rem; background: rgba(0,0,0,0.45); border-radius: 15px; margin: 1.5rem auto; max-width: 900px; }
+    .ai-platform h3 { font-size: 1.2rem; color: #00ffff; }
+    .ai-platform ul { list-style: none; padding: 0; display: flex; gap: 1rem; flex-wrap: wrap; }
+    .ai-platform li { margin: 0.3rem 0.5rem; font-weight: 600; background: rgba(255,255,255,0.06); padding: 0.4rem 0.8rem; border-radius: 999px; }
+    .section { padding: 3rem 2rem; max-width: 1200px; margin: 0 auto; }
+    .what-is { text-align: center; }
+    .what-is h2 { font-size: 1.7rem; color: #ff00ff; margin-bottom: 1rem; }
+    .what-is p { font-size: 0.98rem; margin-bottom: 1rem; opacity: 0.95; }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+    .feature { background: rgba(255,255,255,0.06); padding: 1.1rem; border-radius: 10px; text-align: center; transition: transform 0.3s, box-shadow 0.3s; border-left: 5px solid #00ffff; }
+    .feature:hover { transform: translateY(-8px); box-shadow: 0 10px 20px rgba(255,0,255,0.25); }
+    .feature h3 { color: #00ffff; margin-bottom: 0.35rem; font-size: 1.02rem; }
+    .upload-section { text-align: center; margin: 2rem 0; background: rgba(0,0,0,0.45); padding: 1.2rem; border-radius: 10px; }
+    .upload-section h3 { color: #ff00ff; margin-bottom: 0.6rem; }
+    #upload-form input[type="text"], #upload-form input[type="file"] { margin: 0.4rem; padding: 0.5rem; background: #111; color: #fff; border: 1px solid #00ffff; border-radius: 5px; }
+    #analysis-result { margin-top: 1rem; padding: 1rem; background: rgba(0,255,255,0.1); border-radius: 5px; white-space: pre-wrap; text-align: left; }
+    .app-mockup { text-align: center; margin: 1.5rem 0; }
+    .phone-mockup { max-width: 200px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,255,255,0.4); transition: transform 0.5s; }
+    .phone-mockup:hover { transform: scale(1.05); }
+    .modal { display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); backdrop-filter: blur(5px); }
+    .modal-content { background: linear-gradient(to bottom, #111, #222); margin: 8% auto; padding: 1.2rem; border: 2px solid #00ffff; width: 88%; max-width: 520px; border-radius: 10px; box-shadow: 0 0 20px #ff00ff; }
+    .close { color: #fff; float: right; font-size: 1.6rem; cursor: pointer; }
+    #chat-history { height: 220px; overflow-y: auto; margin: 0.7rem 0; padding: 0.7rem; background: rgba(0,0,0,0.5); border: 1px solid #ff00ff; border-radius: 5px; }
+    #chat-input { width: 64%; padding: 0.5rem; background: #333; color: #fff; border: 1px solid #00ffff; border-radius: 5px; }
+    #send-btn, #voice-btn { padding: 0.5rem 1rem; background: #ff00ff; color: #000; border: none; border-radius: 5px; cursor: pointer; margin-left: 0.5rem; }
+    .dashboard { padding: 3rem 2rem; text-align: center; display: none; }
+    .status-window { background: rgba(0,0,0,0.8); border: 2px solid #00ffff; padding: 1.3rem; margin: 1.2rem auto; max-width: 460px; border-radius: 10px; box-shadow: 0 0 20px #ff00ff; }
+    .stats ul, .daily-tasks ul { list-style: none; padding: 0; }
+    .graphs { max-width: 700px; margin: 1.5rem auto; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; }
+    footer { background: #000; text-align: center; padding: 1.2rem; border-top: 1px solid #333; }
+    #ai-advisor { position: fixed; bottom: 20px; left: 20px; width: 300px; background: rgba(0,0,0,0.9); border: 2px solid #00ffff; border-radius: 10px; padding: 0.8rem; z-index: 1002; }
+    #ai-advisor h4 { color: #ff00ff; margin-bottom: 0.35rem; font-size: 1rem; }
+    #ai-input { width: 100%; padding: 0.5rem; background: #333; color: #fff; border: 1px solid #00ffff; border-radius: 5px; margin-bottom: 0.5rem; }
+    #ai-send { background: #ff00ff; color: #000; border: none; padding: 0.5rem; border-radius: 5px; cursor: pointer; }
+    #ai-response { margin-top: 0.4rem; font-size: 0.92rem; color: #00ffff; min-height: 1.2rem; }
+    @media (max-width: 768px) {
+      .hero { padding: 2rem; min-height: 380px; }
+      .hero h1 { font-size: 1.6rem; }
+      .hero p { font-size: 0.95rem; }
+      .ai-platform { flex-direction: column; text-align: center; gap: 0.8rem; }
+      .features { grid-template-columns: 1fr; }
+      #ai-advisor { width: calc(100% - 40px); left: 20px; }
+      #chat-input { width: 58%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.jpeg" alt="Ethlete Kapture Logo" class="logo">
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#courses">Courses</a></li>
+        <li><a href="#analyze" id="analyze-link">Let’s Analyze</a></li>
+        <li><a href="#" id="dashboard-link">Dashboard</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>From Kanyakumari to Kashmir, AI Sees the Spark.<br>One Click. One Chance. One India.</h1>
+      <p>"No ground too remote, no dream too great — your phone's AI gaze captures performance, proves talent, and connects you to India's sports future."</p>
+      <a href="#get-started" class="btn">KNOW YOUR LEVEL</a>
+    </div>
+    <div class="ai-platform">
+      <h3>AI-Powered Mobile Platform for Democratizing Sports Talent Assessment</h3>
+      <ul>
+        <li>Video Recording</li>
+        <li>AI Analysis</li>
+        <li>Cheat Detection</li>
+        <li>Benchmarks</li>
+        <li>Auto Segments</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="get-started" class="section what-is">
+    <h2>What is ETHLETE KAPTURE?</h2>
+    <p>AI-powered app for sports talent assessment in India, aiding athletes nationwide.</p>
+    <p>Record tests (jumps, runs, sit-ups) with on-device analysis: estimate heights, count reps, time runs, detect cheats—offline-capable.</p>
+    <p>Get benchmarks, gamified progression, auto-clipping, and secure submissions.</p>
+
+    <div class="features">
+      <div class="feature">
+        <h3>AI-based Cheat Detection</h3>
+        <p>Flags tampered videos or incorrect movements for fair assessments.</p>
+      </div>
+      <div class="feature">
+        <h3>Offline Video Analysis</h3>
+        <p>Local analysis; internet optional.</p>
+      </div>
+      <div class="feature">
+        <h3>Performance Benchmarking</h3>
+        <p>Compares vs age/gender norms with instant feedback.</p>
+      </div>
+      <div class="feature">
+        <h3>Gamified Interface</h3>
+        <p>Levels, EXP, and stats to boost engagement.</p>
+      </div>
+      <div class="feature">
+        <h3>Auto-Test Segmentation</h3>
+        <p>Detects reps and key moments automatically.</p>
+      </div>
+    </div>
+
+    <div class="upload-section">
+      <h3>Upload Your Performance Video or Image</h3>
+      <form id="upload-form" enctype="multipart/form-data">
+        <input type="text" name="age_group" placeholder="Age Group (e.g., 20-29)" required>
+        <input type="text" name="gender" placeholder="Gender (Male/Female)" required>
+        <input type="file" name="file" accept="video/*,image/*" required>
+        <select name="lang" id="upload-lang-select" style="margin:0.4rem;padding:0.5rem;border-radius:5px;border:1px solid #00ffff;background:#111;color:#fff;">
+          <option value="en">English</option>
+          <option value="hi">Hindi</option>
+          <option value="ta">Tamil</option>
+        </select>
+        <button type="submit" class="btn">Analyze Performance</button>
+      </form>
+      <div id="analysis-result"></div>
+    </div>
+
+    <div class="app-mockup">
+      <img src="https://via.placeholder.com/200x400/000/fff?text=App+Mockup" alt="Ethlete Kapture App" class="phone-mockup">
+    </div>
+  </section>
+
+  <div id="chatbot-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>AI Coach Chatbot</h2>
+      <select id="lang-select">
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+        <option value="ta">Tamil</option>
+      </select>
+      <button id="voice-btn">Speak</button>
+      <div id="chat-history"></div>
+      <input type="text" id="chat-input" placeholder="Ask about training...">
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
+
+  <section id="dashboard" class="dashboard">
+    <h2>Your Athlete Status</h2>
+    <div class="status-window">
+      <p id="level">Level: 1</p>
+      <p id="exp">EXP: 0 / 100</p>
+      <p id="rating">Rating: E</p>
+      <p id="streak">Streak: 0 days</p>
+      <div class="stats"><h3>Stats</h3><ul id="stats-list"></ul></div>
+      <div class="daily-tasks"><h3>Daily Quests</h3><ul id="tasks-list"></ul></div>
+    </div>
+    <div class="graphs">
+      <h3>Performance Trends</h3>
+      <canvas id="progress-chart" width="400" height="200"></canvas>
+    </div>
+  </section>
+
+  <div id="ai-advisor">
+    <h4>AI Advisor</h4>
+    <p>Ask about training, performance, or features.</p>
+    <input type="text" id="ai-input" placeholder="Type your question...">
+    <button id="ai-send">Send</button>
+    <div id="ai-response"></div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Ethlete Kapture. Empowering India's Sports Future.</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='config.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const API_BASE = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE) ? CONFIG.API_BASE : window.location.origin;
+
+    let userData = {
+      level: 1, exp: 0, streak: 0, rating: 'E',
+      stats: {strength:5, agility:5, endurance:5},
+      progress_history: [], daily_tasks: []
+    };
+    let progressChart = null;
+    let EK_SID = localStorage.getItem("EK_SID") || "";
+    let currentController = null;
+
+    function updateDashboard(data) {
+      userData = data;
+      document.getElementById('level').textContent = `Level: ${userData.level}`;
+      document.getElementById('exp').textContent = `EXP: ${userData.exp} / ${100 * userData.level}`;
+      document.getElementById('rating').textContent = `Rating: ${userData.rating}`;
+      document.getElementById('streak').textContent = `Streak: ${userData.streak} days`;
+      document.getElementById('stats-list').innerHTML =
+        Object.entries(userData.stats).map(([k,v]) => `<li>${k.charAt(0).toUpperCase()+k.slice(1)}: ${v}</li>`).join('');
+      document.getElementById('tasks-list').innerHTML =
+        (userData.daily_tasks || []).map(t => `<li>${t}</li>`).join('');
+
+      const labels = (userData.progress_history || []).map(h => h.date || '');
+      const jumpData = (userData.progress_history || []).map(h => h.max_height || 0);
+      const repsData = (userData.progress_history || []).map(h => h.reps || 0);
+
+      const ctx = document.getElementById('progress-chart').getContext('2d');
+      if (progressChart) { progressChart.destroy(); }
+      progressChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Jump Height (cm)', data: jumpData, borderColor: '#00ffff', backgroundColor: 'rgba(0,255,255,0.2)', tension: 0.25, fill: true },
+            { label: 'Reps', data: repsData, borderColor: '#ff00ff', backgroundColor: 'rgba(255,0,255,0.2)', tension: 0.25, fill: true },
+          ]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+      });
+    }
+
+    async function fetchDashboard() {
+      try {
+        const res = await fetch(`${API_BASE}/dashboard`);
+        const data = await res.json();
+        updateDashboard(data);
+        document.getElementById('dashboard').style.display = 'block';
+      } catch (e) { console.error('Dashboard error:', e); }
+    }
+
+    // STREAMING CHAT
+    async function streamChat(userMsg) {
+      const ch = document.getElementById('chat-history');
+      const lang = document.getElementById('lang-select').value || 'en';
+
+      ch.innerHTML += `<p><strong>You:</strong> ${userMsg}</p>`;
+      const aiP = document.createElement('p');
+      aiP.innerHTML = `<strong>AI:</strong> <span id="ai-stream"></span>`;
+      ch.appendChild(aiP);
+      ch.scrollTop = ch.scrollHeight;
+
+      const sendBtn = document.getElementById('send-btn');
+      sendBtn.textContent = 'Stop';
+      sendBtn.disabled = false;
+
+      currentController = new AbortController();
+      try {
+        const res = await fetch(`${API_BASE}/chat/stream`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ message: userMsg, lang, sid: EK_SID }),
+          signal: currentController.signal
+        });
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let aiText = '';
+        let seenSession = false;
+
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          let chunk = decoder.decode(value, { stream: true });
+          if (!seenSession && chunk.startsWith("[SESSION]")) {
+            const idx = chunk.indexOf("\n");
+            const first = chunk.slice(0, idx >= 0 ? idx : chunk.length);
+            const sid = first.replace("[SESSION]", "").trim();
+            if (sid) { EK_SID = sid; localStorage.setItem("EK_SID", EK_SID); }
+            chunk = idx >= 0 ? chunk.slice(idx + 1) : '';
+            seenSession = true;
+          }
+          aiText += chunk;
+          aiP.querySelector('#ai-stream').textContent = aiText;
+          ch.scrollTop = ch.scrollHeight;
+        }
+      } catch (e) {
+        aiP.querySelector('#ai-stream').textContent += " (stopped)";
+      } finally {
+        sendBtn.textContent = 'Send';
+        currentController = null;
+      }
+    }
+
+    function openChatWithSuggestions(suggestions = []) {
+      const modal = document.getElementById('chatbot-modal');
+      modal.style.display = 'block';
+      const ch = document.getElementById('chat-history');
+      const block = document.createElement('div');
+      block.innerHTML = `<p><strong>Coach:</strong> Want follow-up? Click a suggestion:</p>` +
+        suggestions.map((s) => `<p><a href="#" class="sugg" data-q="${encodeURIComponent(s)}">• ${s}</a></p>`).join('');
+      ch.appendChild(block);
+      ch.scrollTop = ch.scrollHeight;
+      ch.querySelectorAll('a.sugg').forEach(a => {
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          const q = decodeURIComponent(a.getAttribute('data-q') || '');
+          document.getElementById('chat-input').value = q;
+          document.getElementById('send-btn').click();
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchDashboard();
+
+      // Upload handler (image or video)
+      const uploadForm = document.getElementById('upload-form');
+      uploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(uploadForm);
+        const lang = document.getElementById('upload-lang-select').value || 'en';
+        formData.append('lang', lang);
+        const res = await fetch(`${API_BASE}/upload`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!data.success) {
+          document.getElementById('analysis-result').textContent = `Upload failed: ${data.error || 'Unknown error'}`;
+          return;
+        }
+        const m = data.metrics;
+        const lines = [];
+        lines.push("Analysis:");
+        lines.push(data.analysis);
+        lines.push("");
+        lines.push("Metrics:");
+        lines.push(`- Height: ${Number(m.max_height || 0).toFixed(1)} cm`);
+        lines.push(`- Reps: ${m.reps}`);
+        lines.push(`- Time: ${Number(m.time || 0).toFixed(1)} s`);
+        lines.push("");
+        lines.push("Feedback:");
+        lines.push(data.feedback);
+        lines.push("");
+        if (data.is_cheat) lines.push("Cheat Detected: " + (data.anomalies || []).join(', '));
+        lines.push("");
+        lines.push("Segments:");
+        (data.segments || []).forEach(s => lines.push("- " + s));
+
+        const box = document.getElementById('analysis-result');
+        box.innerHTML = `<pre style="white-space:pre-wrap;margin:0">${lines.join('\n')}</pre>`;
+        if (data.overlay_url) {
+          const img = document.createElement('img');
+          img.src = `${API_BASE}${data.overlay_url}`;
+          img.alt = "Annotated preview";
+          img.style = "display:block;margin-top:10px;max-width:100%;border-radius:8px;border:1px solid rgba(0,255,255,0.4)";
+          box.appendChild(img);
+        }
+
+        updateDashboard(data.user);
+        document.getElementById('dashboard').style.display = 'block';
+
+        // Open chat with tailored suggestions
+        openChatWithSuggestions([
+          "Design a 1-week jump-power micro-cycle.",
+          "What drills fix take-off and landing mechanics?",
+          "Which strength lifts most improve vertical?",
+          "Show warm-up specific to jump testing."
+        ]);
+      });
+
+      // Modal open/close
+      const modal = document.getElementById('chatbot-modal');
+      const analyzeLink = document.getElementById('analyze-link');
+      const closeBtn = document.querySelector('.close');
+      analyzeLink && analyzeLink.addEventListener('click', (e) => { e.preventDefault(); modal.style.display = 'block'; });
+      closeBtn && closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
+
+      // Chat send/stop
+      document.getElementById('send-btn').addEventListener('click', async () => {
+        const btn = document.getElementById('send-btn');
+        if (btn.textContent === 'Stop' && currentController) {
+          currentController.abort();
+          return;
+        }
+        const msg = document.getElementById('chat-input').value.trim();
+        if (!msg) return;
+        document.getElementById('chat-input').value = '';
+        streamChat(msg);
+      });
+
+      // Voice input
+      document.getElementById('voice-btn').addEventListener('click', () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) { alert('Speech recognition not supported on this browser.'); return; }
+        const recognition = new SpeechRecognition();
+        const lang = document.getElementById('lang-select').value || 'en';
+        recognition.lang = lang + '-IN';
+        recognition.start();
+        recognition.onresult = (e) => {
+          document.getElementById('chat-input').value = e.results[0][0].transcript;
+          document.getElementById('send-btn').click();
+        };
+      });
+
+      // AI Advisor forwards to full chat streaming
+      document.getElementById('ai-send').addEventListener('click', async () => {
+        const query = document.getElementById('ai-input').value.trim();
+        if (!query) return;
+        document.getElementById('ai-input').value = '';
+        document.getElementById('chatbot-modal').style.display = 'block';
+        streamChat(query);
+      });
+
+      // Dashboard toggle
+      document.getElementById('dashboard-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        const dash = document.getElementById('dashboard');
+        dash.style.display = (dash.style.display === 'block') ? 'none' : 'block';
+      });
+
+      // Smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', (e) => {
+          const target = document.querySelector(a.getAttribute('href'));
+          if (target) { e.preventDefault(); target.scrollIntoView({behavior:'smooth'}); }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
